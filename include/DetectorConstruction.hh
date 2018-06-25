@@ -95,6 +95,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
   private:
 
      void ChangeGeometry();
+     
+
 
      G4Material*        fAbsorberMaterial;
      G4double           fAbsorberThickness;

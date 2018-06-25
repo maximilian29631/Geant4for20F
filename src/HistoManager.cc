@@ -62,8 +62,8 @@ void HistoManager::Book()
   analysisManager->SetVerboseLevel(1);
   analysisManager->SetActivation(true);    // enable inactivation of histograms
 
-  const G4int numen = 6;
-  const G4String nameNtuple[] = {"absorber","gamma0","gamma1","gamma2","gamma3","primaryenergy"};
+  const G4int numen = 7;
+  const G4String nameNtuple[] = {"absorberbeta","absorbergamma","gamma0","gamma1","gamma2","gamma3","primaryenergy"};
   int index = analysisManager->CreateNtuple("Energies","Energies");
   std::cout<<"INDEX: "<<index<<'\n';
   for (int j = 0;j<numen;j++)

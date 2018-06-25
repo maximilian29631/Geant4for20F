@@ -145,8 +145,8 @@ void PhysicsList::AddDecay()
 
   G4Decay* fDecayProcess = new G4Decay();
 
-  //auto theParticleIterator=GetParticleIterator();
-  theParticleIterator->reset();
+  auto theParticleIterator=GetParticleIterator();
+  //theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -170,8 +170,8 @@ void PhysicsList::AddStepMax()
   // Step limitation seen as a process
   StepMax* stepMaxProcess = new StepMax();
 
-  //auto theParticleIterator=GetParticleIterator();
-  theParticleIterator->reset();
+  auto theParticleIterator=GetParticleIterator();
+  //theParticleIterator->reset();
   while ((*theParticleIterator)()){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();

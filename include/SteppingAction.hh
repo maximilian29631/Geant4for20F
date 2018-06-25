@@ -37,11 +37,13 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
+#include <vector>
 class DetectorConstruction;
 class RunAction;
 class EventAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// Yo
 
 class SteppingAction : public G4UserSteppingAction
 {

@@ -37,21 +37,30 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "StoragePlace.hh"
+#include "TrackInformation.hh"
 
+#include "G4PrimaryParticle.hh"
 #include "G4Step.hh"
 
 #include <sstream>
+#include <algorithm>
+#include <vector>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA)
 :G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
-{}
+{
+	StoreIDs.fBetaIDs.clear();
+	StoreIDs.fGammaIDs.clear();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -62,9 +71,20 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //Only absorber    
   fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
   G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+  TrackInformation *info  = (TrackInformation*)aStep->GetTrack()->GetUserInformation();
+  G4double primcharge = info->GetOriginalParticle()->GetPDGCharge();
   if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == fDetector->GetAbsorber())
 		{
-  		fEventAction->AddEnergyAbsorber (aStep->GetTotalEnergyDeposit());
+			if (primcharge)//Primary paticle
+				{	
+					fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
+				//	std::cout<<"TRACK BETA: "<<trackid<<std::endl;
+				}
+			else
+				{
+					fEventAction->AddEnergyAbsorberGamma (aStep->GetTotalEnergyDeposit());
+				//	std::cout<<"TRACK GAMMA: "<<trackid<<std::endl;
+				}	
 		}
   else 
 	{
@@ -96,8 +116,9 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       G4cout << i << ": " << G4PhysicsModelCatalog::GetModelName(i) << G4endl;
     }
   }*/
-  
+ 
   }
+  //delete info;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

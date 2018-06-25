@@ -51,7 +51,8 @@ class EventAction : public G4UserEventAction
     virtual void   EndOfEventAction(const G4Event*);
     
     void AddEnergy      (G4double edep)   {fEnergyDeposit  += edep;};
-    void AddEnergyAbsorber      (G4double edep)   {fEnergyDepositAbsorber  += edep;};
+    void AddEnergyAbsorberBeta      (G4double edep)   {fEnergyDepositAbsorberBeta  += edep;};
+    void AddEnergyAbsorberGamma      (G4double edep)   {fEnergyDepositAbsorberGamma  += edep;};
     void AddEnergyGamma         (G4double edep, int num)   {if (num< numgamma) fEnergyDepositGamma[num]  += edep;};
     void AddTrakLenCharg(G4double length) {fTrakLenCharged += length;};
     void AddTrakLenNeutr(G4double length) {fTrakLenNeutral += length;};
@@ -68,7 +69,8 @@ class EventAction : public G4UserEventAction
   private:
     const static int numgamma = 4;
     G4double fEnergyDeposit;
-    G4double fEnergyDepositAbsorber;
+    G4double fEnergyDepositAbsorberGamma;
+    G4double fEnergyDepositAbsorberBeta;
     G4double fEnergyDepositGamma[numgamma];
     G4double fTrakLenCharged, fTrakLenNeutral;
     G4int    fNbStepsCharged, fNbStepsNeutral;

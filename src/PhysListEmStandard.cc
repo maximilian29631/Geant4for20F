@@ -29,6 +29,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4PhysicsListHelper.hh"
@@ -93,8 +94,8 @@ void PhysListEmStandard::ConstructProcess()
   
   // Add standard EM Processes
   //
-  //auto aParticleIterator=GetParticleIterator();
-  aParticleIterator->reset();
+  auto aParticleIterator=GetParticleIterator();
+ // aParticleIterator->reset();
   while( (*aParticleIterator)() ){
     G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();

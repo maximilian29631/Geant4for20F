@@ -76,8 +76,8 @@ void PhysListEmStandardSSM::ConstructProcess()
 {
   // Add standard EM Processes
 
-  //auto aParticleIterator=GetParticleIterator();
-  aParticleIterator->reset();
+  auto aParticleIterator=GetParticleIterator();
+  //aParticleIterator->reset();
   while( (*aParticleIterator)() ){
     G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();

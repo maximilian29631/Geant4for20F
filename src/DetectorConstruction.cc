@@ -565,6 +565,8 @@ void DetectorConstruction::SetAbsorberXpos(G4double val)
 
 void DetectorConstruction::ConstructSDandField()
 {
+ 
+
   if ( fFieldMessenger.Get() == 0 ) {
     // Create global magnetic field messenger.
     // Uniform magnetic field is then created automatically if

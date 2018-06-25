@@ -35,6 +35,7 @@
 
 #include "Run.hh"
 #include "HistoManager.hh"
+#include "StoragePlace.hh"
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
@@ -63,7 +64,8 @@ void EventAction::BeginOfEventAction(const G4Event* )
 {
  // initialisation per event
  fEnergyDeposit  = 0.;
- fEnergyDepositAbsorber  = 0.;
+ fEnergyDepositAbsorberBeta  = 0.;
+ fEnergyDepositAbsorberGamma  = 0.;
  for (int w = 0;w<numgamma;w++)
 	{
 	fEnergyDepositGamma[w]  = 0.;
@@ -79,7 +81,7 @@ void EventAction::BeginOfEventAction(const G4Event* )
 
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
-  Run* run = static_cast<Run*>(
+ Run* run = static_cast<Run*>(
              G4RunManager::GetRunManager()->GetNonConstCurrentRun());
               
  run->AddEnergy(fEnergyDeposit);
@@ -104,21 +106,21 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     G4double ke = primaryParticle->GetKineticEnergy();
     
     analysisManager->FillH1(0, fEnergyDeposit/MeV);   
-    analysisManager->FillH1(1, fEnergyDepositAbsorber/MeV);   
+    analysisManager->FillH1(1, (fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);   
     analysisManager->FillH1(49, ke/MeV);   
 
-    analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorber/MeV);
-    analysisManager->FillNtupleDColumn(5,ke/MeV);  
+    analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
+    analysisManager->FillNtupleDColumn(1,fEnergyDepositAbsorberGamma/MeV);
+    analysisManager->FillNtupleDColumn(6,ke/MeV);  
     for (int w = 0;w<numgamma;w++)
 	{
 	int histonum = 25 + w;
 	analysisManager->FillH1(histonum,fEnergyDepositGamma[w]/MeV);
-	analysisManager->FillNtupleDColumn(w + 1,fEnergyDepositGamma[w]/MeV);
+	analysisManager->FillNtupleDColumn(w + 2,fEnergyDepositGamma[w]/MeV);
 	}
     analysisManager->AddNtupleRow();
     //outdep<<fEnergyDeposit<<G4endl;
     //outsource<<ke<<G4endl;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

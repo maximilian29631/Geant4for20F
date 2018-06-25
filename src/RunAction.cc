@@ -82,7 +82,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   // keep run condition
   //Put them at same starting pos?
   if ( fPrimary ) {
-    std::cout<<"RUN START! "<<std::endl;
+   // std::cout<<"RUN START! "<<std::endl;
     fPrimary->GetGeneralParticleSource()->SetCurrentSourceto(0);
     G4ParticleDefinition* particle 
     = fPrimary->GetGeneralParticleSource()->GetParticleDefinition();

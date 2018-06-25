@@ -38,6 +38,7 @@
 #include "Run.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
+#include "TrackInformation.hh"
 
 #include "G4RunManager.hh"
 #include "G4Track.hh"
@@ -62,9 +63,15 @@ void TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
     fXstartAbs = fDetector->GetxstartAbs();
     fXendAbs   = fDetector->GetxendAbs();
     fPrimaryCharge = aTrack->GetDefinition()->GetPDGCharge();
+   // std::cout<<"CHARGE HERE: "<<fPrimaryCharge<<std::endl;
     fDirX = aTrack->GetMomentumDirection().x();
   }
-}
+  if (aTrack->GetParentID() == 0 && aTrack->GetUserInformation() == 0) {
+	TrackInformation *anInfo = new TrackInformation(aTrack);
+	G4Track *theTrack = (G4Track*)aTrack;
+  	theTrack->SetUserInformation(anInfo);
+  	}
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -206,6 +213,23 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
     analysisManager->FillH1(6, xVertex);
     if (notabsor) analysisManager->FillH1(7, xVertex); 
   }
+
+  G4TrackVector* secondaries = fpTrackingManager->GimmeSecondaries();
+  if(secondaries)
+	    {
+
+     		        TrackInformation* info = (TrackInformation*)(aTrack->GetUserInformation());
+			size_t nSeco = secondaries->size();
+			if(nSeco>0)
+				{
+				for(size_t i=0;i<nSeco;i++)
+					{ 
+					TrackInformation* infoNew = new TrackInformation(info);
+					(*secondaries)[i]->SetUserInformation(infoNew);
+					}
+				}
+	    }
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
