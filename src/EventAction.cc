@@ -35,6 +35,7 @@
 
 #include "Run.hh"
 #include "HistoManager.hh"
+
 #include "StoragePlace.hh"
 
 #include "G4RunManager.hh"
@@ -73,6 +74,7 @@ void EventAction::BeginOfEventAction(const G4Event* )
  fTrakLenCharged = fTrakLenNeutral = 0.; 
  fNbStepsCharged = fNbStepsNeutral = 0;
  fTransmitFlag   = fReflectFlag    = 0;    
+ BremsEn.energy = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,8 +107,13 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     G4PrimaryParticle* primaryParticle = primaryVertex->GetPrimary();
     G4double ke = primaryParticle->GetKineticEnergy();
     
+    G4PrimaryVertex* primaryVertex3 = evt->GetPrimaryVertex(2);
+    G4PrimaryParticle* primaryParticle3 = primaryVertex3->GetPrimary();
+    G4double ke3 = primaryParticle3->GetKineticEnergy();
+
     analysisManager->FillH1(0, fEnergyDeposit/MeV);   
     analysisManager->FillH1(1, (fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);   
+    analysisManager->FillH1(35, ke3/MeV); 
     analysisManager->FillH1(49, ke/MeV);   
 
     analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);

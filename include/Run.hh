@@ -57,6 +57,7 @@ class Run : public G4Run
     
    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
    void SetPrimaries(G4ParticleDefinition* particle, G4double energy,G4ParticleDefinition* particle2, G4double energy2);
+   void SetPrimaries(G4ParticleDefinition* particle, G4double energy,G4ParticleDefinition* particle2, G4double energy2,G4ParticleDefinition* particle3, G4double energy3);
 
    void AddEnergy (G4double edep)
               {fEnergyDeposit += edep; fEnergyDeposit2 += edep*edep;};
@@ -105,17 +106,24 @@ class Run : public G4Run
     DetectorConstruction*  fDetector;
     G4ParticleDefinition*  fParticle;
     G4ParticleDefinition*  fParticle2;
+    G4ParticleDefinition*  fParticle3;
     G4double  fEkin;
     G4double  fEkin2;
+    G4double  fEkin3;
                            
     G4double fEnergyDeposit,  fEnergyDeposit2;
     G4double fTrakLenCharged, fTrakLenCharged2;
-    G4double fTrakLenNeutral, fTrakLenNeutral2;
-    G4double fNbStepsCharged, fNbStepsCharged2;
-    G4double fNbStepsNeutral, fNbStepsNeutral2;
-    G4double fMscProjecTheta, fMscProjecTheta2;
+    G4double fTrakLenNeutral, 
+	     fTrakLenNeutral2;
+    G4double fNbStepsCharged, 
+	     fNbStepsCharged2;
+    G4double fNbStepsNeutral, 
+	     fNbStepsNeutral2;
+    G4double fMscProjecTheta, 
+	     fMscProjecTheta2;
     G4double fMscThetaCentral;
     G4double fMscThetaCentral2;
+    G4double fMscThetaCentral3;
     
     G4int    fNbGamma, fNbElect, fNbPosit;
     G4int    fTransmit[2],   fReflect[2];

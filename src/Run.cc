@@ -35,6 +35,7 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
+#include "InnerBrems.hh"
 
 #include "G4EmCalculator.hh"
 #include "G4SystemOfUnits.hh"
@@ -87,11 +88,28 @@ void Run::SetPrimaries(G4ParticleDefinition* particle, G4double energy,G4Particl
   fParticle = particle;
   fEkin = energy;
   fParticle2 = particle2;
-  fEkin2 = energy;
+  fEkin2 = energy2;
   
   //compute theta0
   fMscThetaCentral = 3*ComputeMscHighland(particle,energy);
   fMscThetaCentral2 = 3*ComputeMscHighland(particle2,energy2);
+}
+
+void Run::SetPrimaries(G4ParticleDefinition* particle, G4double energy,G4ParticleDefinition* particle2, G4double energy2,G4ParticleDefinition* particle3, G4double energy3)
+{ 
+  fParticle = particle;
+  fEkin = energy;  
+  fParticle2 = particle2;
+  fEkin2 = energy2;
+  fParticle3 = particle3;
+  fEkin3 = energy3;
+
+
+  //Particle 3 is my inner brems 
+  //compute theta0
+  fMscThetaCentral = 3*ComputeMscHighland(particle,energy);
+  fMscThetaCentral2 = 3*ComputeMscHighland(particle2,energy2);
+  fMscThetaCentral3 = 3*ComputeMscHighland(particle2,energy2);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,6 +123,8 @@ void Run::Merge(const G4Run* run)
   fEkin     = localRun->fEkin;
   fParticle2 = localRun->fParticle2;
   fEkin2     = localRun->fEkin2;
+  fParticle3 = localRun->fParticle3;
+  fEkin3     = localRun->fEkin3;
   
   fMscThetaCentral = localRun->fMscThetaCentral;
 

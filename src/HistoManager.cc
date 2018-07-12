@@ -69,8 +69,8 @@ void HistoManager::Book()
   for (int j = 0;j<numen;j++)
 	{
 	index = analysisManager->CreateNtupleDColumn(nameNtuple[j]);	
-	std::cout<<"INDEX: "<<index<<'\n';
-	std::cout<<"J: "<<j<<'\n';
+//	std::cout<<"INDEX: "<<index<<'\n';
+//	std::cout<<"J: "<<j<<'\n';
 	}  
   analysisManager->FinishNtuple();
 // Define histograms start values
@@ -116,7 +116,10 @@ void HistoManager::Book()
                   "(reflect , charged) : ener fluence: dE(MeV)/dOmega",   //31
                   "(reflect , charged) : space angle: dN/dOmega",         //32
                   "(reflect , charged) : projected angle at exit",        //33
-                  "dummy","dummy","dummy","dummy","dummy","dummy",       //34-39
+                  "dummy",						  //34
+		  "Inner Brems Input",					  //35
+		  "Inner Brems Output",					  //36
+		  "dummy","dummy","dummy",  		     		  //37-39
                   "(reflect , neutral) : kinetic energy at exit",         //40
                   "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",   //41
                   "(reflect , neutral) : space angle: dN/dOmega",         //42

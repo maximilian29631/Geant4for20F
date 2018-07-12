@@ -41,6 +41,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "StoragePlace.hh"
+#include "InnerBrems.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4GeneralParticleSource.hh"
@@ -59,6 +61,9 @@ fParticleGun(0)
     fParticleGun->AddaSource(1);
     fParticleGun->SetCurrentSourceto(1);
     fParticleGun = InitializeGPS(1);
+    fParticleGun->AddaSource(2);
+    fParticleGun->SetCurrentSourceto(2);
+    fParticleGun = InitializeGPS(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,7 +84,18 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     double posy = pos.y();
     double posz = pos.z();
     anEvent->GetPrimaryVertex(1)->SetPosition(posx,posy,posz);
+    anEvent->GetPrimaryVertex(2)->SetPosition(posx,posy,posz);
     G4ThreeVector dirafter = anEvent->GetPrimaryVertex(1)->GetPrimary()->GetMomentum();
+    InnerBrems brems;
+    double en1 = anEvent->GetPrimaryVertex(0)->GetPrimary()->GetKineticEnergy()/keV;
+    double en3 = brems.ComputeGammaVal(en1);
+    double ennew = (en1 - en3)/1000.0;
+   // std::cout<<"OLD: "<<en1<<std::endl;
+    //std::cout<<"NEW: "<<ennew/MeV<<std::endl;
+    anEvent->GetPrimaryVertex(0)->GetPrimary()->SetKineticEnergy(ennew/MeV);
+    anEvent->GetPrimaryVertex(2)->GetPrimary()->SetKineticEnergy(en3/1000.0);
+    BremsEn.energy = en3;	
+ //   std::cout<<"ENERGY GAMMA: "<<en3<<std::endl;
     //std::cout<<"z before: "<<dirbefore.z()<<" z after: "<<dirafter.z()<<std::endl;
 
     //Put the verticies at the same place.	  
@@ -95,7 +111,7 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
     G4ParticleDefinition* electron = particleTable->FindParticle("e-");
     G4ParticleDefinition* gamma = particleTable->FindParticle("gamma");
-    gps->SetCurrentSourceto(0);
+    gps->SetCurrentSourceto(parttype);
 
     // set energy distribution
     if (!parttype)
@@ -105,14 +121,14 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
 	    eneDist->SetEnergyDisType("Mono"); // or gauss
 	    eneDist->SetMonoEnergy(1*MeV);
 	    std::cout<<"ADDING ELECTRON!"<<std::endl;
-    	    }
+	    }
     else
 	    {
 	    gps->GetCurrentSource()->SetParticleDefinition(gamma);
 	    G4SPSEneDistribution *eneDist = gps->GetCurrentSource()->GetEneDist() ;
 	    eneDist->SetEnergyDisType("Mono"); // or gauss
 	    eneDist->SetMonoEnergy(1.633602*MeV);
-    	    std::cout<<"ADDING GAMMA!"<<std::endl;
+	    std::cout<<"ADDING GAMMA!"<<std::endl;
 	    }
 
     // degrader at 42
@@ -151,9 +167,13 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     posDist->SetHalfY(0.735*mm);//
     posDist->SetHalfZ(2.25*mm);*/
     
-    double sourcesizex = 3.6; // mm   
-    double sourcesizey = 3.5; // mm   
-    double sourcesizez = 0.4; 
+  //  double sourcesizex = 3.6; // mm    
+  //  double sourcesizey = 3.5; // mm   
+  //  double sourcesizez = 0.4; 
+    
+    double sourcesizex = 0.4; // mm horizontal
+    double sourcesizey = 3.5; // mm verticle  
+    double sourcesizez = 3.6; // mm depth  
 
     double sourcedepth = 1.156; //cm 
     double halfsize = 9.76/2.0; //Size of detector in cm 

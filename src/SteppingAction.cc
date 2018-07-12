@@ -37,7 +37,6 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
-#include "StoragePlace.hh"
 #include "TrackInformation.hh"
 
 #include "G4PrimaryParticle.hh"
@@ -52,8 +51,6 @@ SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA)
 :G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
 {
-	StoreIDs.fBetaIDs.clear();
-	StoreIDs.fGammaIDs.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

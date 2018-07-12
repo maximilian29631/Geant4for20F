@@ -47,6 +47,8 @@
 #include <iomanip>
 #include "G4GeneralParticleSource.hh"
 
+#include "InnerBrems.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
@@ -88,14 +90,21 @@ void RunAction::BeginOfRunAction(const G4Run*)
     = fPrimary->GetGeneralParticleSource()->GetParticleDefinition();
     G4double energy = fPrimary->GetGeneralParticleSource()->GetParticleEnergy();
     G4ThreeVector Pos = fPrimary->GetGeneralParticleSource()->GetParticlePosition();
+    std::cout<<"ENERGY 1:"<<energy<<std::endl;
 
     fPrimary->GetGeneralParticleSource()->SetCurrentSourceto(1);
       
     G4ParticleDefinition* particle2 
     = fPrimary->GetGeneralParticleSource()->GetParticleDefinition();
     G4double energy2 = fPrimary->GetGeneralParticleSource()->GetParticleEnergy();
+    
+    fPrimary->GetGeneralParticleSource()->SetCurrentSourceto(2);
+      
+    G4ParticleDefinition* particle3 
+    = fPrimary->GetGeneralParticleSource()->GetParticleDefinition();
+    G4double energy3 = fPrimary->GetGeneralParticleSource()->GetParticleEnergy();
     //fRun->SetPrimary(particle, energy);
-    fRun->SetPrimaries(particle,energy,particle2,energy2);
+    fRun->SetPrimaries(particle,energy,particle2,energy2,particle3,energy3);
 
   }
   
