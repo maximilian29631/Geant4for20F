@@ -2,7 +2,7 @@
 #include "TrackInformation.hh"
 #include "G4ios.hh"
 
-G4Allocator<TrackInformation> aTrackInformationAllocator;
+G4ThreadLocal G4Allocator<TrackInformation> * aTrackInformationAllocator = 0;
 
 TrackInformation::TrackInformation()
 {
@@ -35,6 +35,19 @@ TrackInformation::TrackInformation(const TrackInformation* aTrackInfo)
 }
 
 TrackInformation::~TrackInformation(){;}
+
+TrackInformation& TrackInformation::operator =(const TrackInformation& aTrackInfo)
+	{
+	originalTrackID = aTrackInfo.originalTrackID;
+	particleDefinition = aTrackInfo.particleDefinition;
+	originalPosition = aTrackInfo.originalPosition;
+	originalMomentum = aTrackInfo.originalMomentum;
+	originalEnergy = aTrackInfo.originalEnergy;
+	originalTime = aTrackInfo.originalTime;
+	
+	return *this;
+	}
+
 
 void TrackInformation::Print() const
 {

@@ -16,11 +16,12 @@ class TrackInformation : public G4VUserTrackInformation
 		TrackInformation(const TrackInformation* aTrackInfo);
 		virtual ~TrackInformation();
 		     
-		/*inline void *operator new(size_t);
+		inline void *operator new(size_t);
 		inline void operator delete(void *aTrackInfo);
-		inline int operator ==(const TrackInformation& right) const
-			{return (this==&right);}
-		*/
+	
+		TrackInformation& operator =(const TrackInformation& right);
+
+		void SetTrackInformation(const G4Track *aTrack);
 		void Print() const;
 
 	private:
@@ -40,16 +41,18 @@ class TrackInformation : public G4VUserTrackInformation
 		inline G4double GetOriginalTime() const {return originalTime;}
 };
 
-//extern G4Allocator<TrackInformation> aTrackInformationAllocator;
-/*
+extern G4ThreadLocal
+	G4Allocator<TrackInformation> * aTrackInformationAllocator;
+
 inline void* TrackInformation::operator new(size_t)
-	{ void* aTrackInfo;
-	  	aTrackInfo = (void*)aTrackInformationAllocator.MallocSingle();
-	  	return aTrackInfo;
+	{
+	if (!aTrackInformationAllocator)
+		aTrackInformationAllocator = new G4Allocator<TrackInformation>;
+	return (void*) aTrackInformationAllocator->MallocSingle();
 	}
-*/
-/*inline void TrackInformation::operator delete(void *aTrackInfo)
-	{ aTrackInformationAllocator.FreeSingle((TrackInformation*)aTrackInfo);}
-*/
+
+inline void TrackInformation::operator delete(void *aTrackInfo)
+	{ aTrackInformationAllocator->FreeSingle((TrackInformation*)aTrackInfo);}
+
 #endif
 
