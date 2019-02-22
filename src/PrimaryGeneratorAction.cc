@@ -87,17 +87,23 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     anEvent->GetPrimaryVertex(2)->SetPosition(posx,posy,posz);
     G4ThreeVector dirafter = anEvent->GetPrimaryVertex(1)->GetPrimary()->GetMomentum();
     InnerBrems brems;
-    double en1 = anEvent->GetPrimaryVertex(0)->GetPrimary()->GetKineticEnergy()/keV;
-    double en3 = brems.ComputeGammaVal(en1);
+    double en1 = anEvent->GetPrimaryVertex(0)->GetPrimary()->GetTotalEnergy()/keV;
+    double en3 = 0;
+//    while(!en3)
+//	    {
+ // 	    en3 = brems.ComputeGammaVal(en1);
+ // 	    }
+    //en3 = brems.ComputeGammaVal(en1);
+    en3 = brems.GetEnergy(en1);
     double ennew = (en1 - en3)/1000.0;
    // std::cout<<"OLD: "<<en1<<std::endl;
     //std::cout<<"NEW: "<<ennew/MeV<<std::endl;
-    anEvent->GetPrimaryVertex(0)->GetPrimary()->SetKineticEnergy(ennew/MeV);
-    anEvent->GetPrimaryVertex(2)->GetPrimary()->SetKineticEnergy(en3/1000.0);
-    BremsEn.energy = en3;	
+    anEvent->GetPrimaryVertex(0)->GetPrimary()->SetTotalEnergy(ennew/MeV);
+    anEvent->GetPrimaryVertex(2)->GetPrimary()->SetTotalEnergy(en3/1000.0);
  //   std::cout<<"ENERGY GAMMA: "<<en3<<std::endl;
     //std::cout<<"z before: "<<dirbefore.z()<<" z after: "<<dirafter.z()<<std::endl;
-
+    double engamma = anEvent->GetPrimaryVertex(1)->GetPrimary()->GetTotalEnergy()/MeV;
+    GammaEn.energy = engamma;
     //Put the verticies at the same place.	  
 }
 
@@ -170,19 +176,29 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
   //  double sourcesizex = 3.6; // mm    
   //  double sourcesizey = 3.5; // mm   
   //  double sourcesizez = 0.4; 
-    
+
+
+    // For flourine 20    
     double sourcesizex = 0.4; // mm horizontal
     double sourcesizey = 3.5; // mm verticle  
     double sourcesizez = 3.6; // mm depth  
 
     double sourcedepth = 1.156; //cm 
+
+
     double halfsize = 9.76/2.0; //Size of detector in cm 
     double sourcelocal = halfsize - sourcedepth;//In cm.
+    //For helium 6
+    /*double sourcesizex = 2.3; // mm horizontal
+    double sourcesizey = 0.73; // mm verticle  
+    double sourcesizez = 2.25; // mm depth  
+*/
    
      ///degrader at 0
     G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
     posDist->SetPosDisType("Volume");  // or Point,Plane,Volume,Beam
-    posDist->SetCentreCoords(G4ThreeVector(sourcelocal*cm,0.0*cm,0.0*cm)); //Source position.
+    posDist->SetCentreCoords(G4ThreeVector(sourcelocal*cm,0.0*cm,0.0*cm)); //Source position. F20
+   // posDist->SetCentreCoords(G4ThreeVector(2.44*cm,1.2674*cm,0.0*cm)); //Source position. He6
     posDist->SetPosDisShape("Para");
     posDist->SetHalfX(sourcesizex/2.0*mm);//y
     posDist->SetHalfY(sourcesizey/2.0*mm);//z

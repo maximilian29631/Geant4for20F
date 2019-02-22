@@ -35,7 +35,6 @@
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
-#include "InnerBrems.hh"
 
 #include "G4EmCalculator.hh"
 #include "G4SystemOfUnits.hh"

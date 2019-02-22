@@ -47,7 +47,6 @@
 #include <iomanip>
 #include "G4GeneralParticleSource.hh"
 
-#include "InnerBrems.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

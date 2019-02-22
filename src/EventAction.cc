@@ -36,8 +36,6 @@
 #include "Run.hh"
 #include "HistoManager.hh"
 
-#include "StoragePlace.hh"
-
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 
@@ -74,7 +72,6 @@ void EventAction::BeginOfEventAction(const G4Event* )
  fTrakLenCharged = fTrakLenNeutral = 0.; 
  fNbStepsCharged = fNbStepsNeutral = 0;
  fTransmitFlag   = fReflectFlag    = 0;    
- BremsEn.energy = 0; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -114,11 +111,11 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     analysisManager->FillH1(0, fEnergyDeposit/MeV);   
     analysisManager->FillH1(1, (fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);   
     analysisManager->FillH1(35, ke3/MeV); 
-    analysisManager->FillH1(49, ke/MeV);   
+    analysisManager->FillH1(49, (ke+ke3)/MeV);   
 
     analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
     analysisManager->FillNtupleDColumn(1,fEnergyDepositAbsorberGamma/MeV);
-    analysisManager->FillNtupleDColumn(6,ke/MeV);  
+    analysisManager->FillNtupleDColumn(6,(ke+ke3)/MeV);  
     for (int w = 0;w<numgamma;w++)
 	{
 	int histonum = 25 + w;

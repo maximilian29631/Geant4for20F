@@ -38,6 +38,7 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 #include "TrackInformation.hh"
+#include "StoragePlace.hh"
 
 #include "G4PrimaryParticle.hh"
 #include "G4Step.hh"
@@ -70,9 +71,11 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
   TrackInformation *info  = (TrackInformation*)aStep->GetTrack()->GetUserInformation();
   G4double primcharge = info->GetOriginalParticle()->GetPDGCharge();
+  G4double primen = info->GetOriginalEnergy();
+  double gammaen = 1.6336;
   if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == fDetector->GetAbsorber())
 		{
-			if (primcharge)//Primary paticle
+			if (primcharge || ((primen != gammaen) && (primcharge == 0)))//Primary paticle
 				{	
 					fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
 				//	std::cout<<"TRACK BETA: "<<trackid<<std::endl;

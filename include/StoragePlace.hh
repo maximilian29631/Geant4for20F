@@ -4,4 +4,4 @@ struct storageplace
 		double energy;
 	};
 
-static storageplace BremsEn;
+static storageplace GammaEn; 
