@@ -116,10 +116,33 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   fLogicWorld;
      G4VPhysicalVolume* fPhysiWorld;
 
+     //For Absorber
+     G4Box* outerCanAb;                //LR
+     G4Box* innerCanAb;                //LR
+     G4SubtractionSolid* solidCanAb;   //LR
+     G4Box* outerMgoAb;                //LR 
+     G4Box* innerMgoAb;                //LR
+     G4SubtractionSolid* solidMgoAb;   //LR
+     G4Box* outerDeadAb;                //LR 
+     G4Box* innerDeadAb;                //LR
+     G4SubtractionSolid* solidDeadAb;   //LR
+     G4Box* solidCrystalAb;
+     // Logical volumes
+     G4LogicalVolume* logicCanAb;
+     G4LogicalVolume* logicMgoAb;      //LR
+     G4LogicalVolume* logicDeadAb;
+
+
      G4Box*             fSolidAbsorber;
      G4LogicalVolume*   fLogicAbsorber;
+     G4VPhysicalVolume* fPhysiAbsorberCan;
+     G4VPhysicalVolume* fPhysiAbsorberMgo;
+     G4VPhysicalVolume* fPhysiAbsorberDead;
      G4VPhysicalVolume* fPhysiAbsorber;
-     
+   
+	
+
+
 	  //
      G4Box* outerCan;                //LR
      G4Box* innerCan;                //LR
@@ -127,17 +150,23 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Box* outerMgo;                //LR 
      G4Box* innerMgo;                //LR
      G4SubtractionSolid* solidMgo;   //LR
+     G4Box* outerDead;                //LR 
+     G4Box* innerDead;                //LR
+     G4SubtractionSolid* solidDead;   //LR
      G4Box* solidCrystal;
      // Logical volumes
      G4LogicalVolume* logicCan;
      G4LogicalVolume* logicMgo;      //LR
      G4LogicalVolume* logicCrystal;
+     G4LogicalVolume* logicDead;
 
      // Physical volumes
      G4VPhysicalVolume* physiCan;
      G4VPhysicalVolume* physiMgo;
+     G4VPhysicalVolume* physiDead;
      G4VPhysicalVolume* physiCrystal;
-    
+   
+
      DetectorMessenger* fDetectorMessenger;
      G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
     

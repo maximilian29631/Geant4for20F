@@ -186,7 +186,7 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     double sourcedepth = 1.156; //cm 
 
 
-    double halfsize = 9.76/2.0; //Size of detector in cm 
+    double halfsize = 9.76/2.0 + 0.2; //Size of detector in cm, including dead layer
     double sourcelocal = halfsize - sourcedepth;//In cm.
     //For helium 6
     /*double sourcesizex = 2.3; // mm horizontal

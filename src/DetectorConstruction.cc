@@ -304,25 +304,6 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                  false,                   //no boolean operation
                                  0);                      //copy number
                                  
-  // Absorber
-  // 
-  fSolidAbsorber = new G4Box("Absorber",        
-                      fAbsorberThickness/2,fAbsorberSizeYZ/2,fAbsorberSizeYZ/2);
-                          
-  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
-                                       fAbsorberMaterial, //its material
-                                       "Absorber");       //its name
-                                                
-  fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
-                        G4ThreeVector(fXposAbs,0.,0.),    //its position
-                                fLogicAbsorber,     //its logical volume
-                                "Absorber",         //its name
-                                fLogicWorld,        //its mother
-                                false,              //no boulean operat
-                                0);                 //copy number
-                                        
-  PrintCalorParameters();         
-  
   //cout << "MgO Density " << MgO->GetDensity()/(g/cm3) << endl;
 
 
@@ -349,19 +330,10 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   G4double mgo3Y;                 //LR
   G4double mgo3Z;                 //LR
   
-  G4Material *CsI = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
-  G4Material *Al = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
-  MgO = G4NistManager::Instance()->FindOrBuildMaterial("G4_MAGNESIUM_OXIDE");
-  std::cout<<"MGO FORMULA: "<<MgO->GetName()<<"\n";
-  G4Material* CanMaterial      = Al;
-  std::cout<<"CAN MATERIAL: "<<Al->GetName()<<"\n";
-  G4Material* CrystalMaterial = CsI;
-
-  // Dimensions
   G4double dead = 2.0*mm;
-  crystalX     = 54.0*mm  - 2*dead;
+  crystalX     = 101.6*mm - 2*dead;
   crystalY     = 54.0*mm  - 2*dead;
-  crystalZ     = 101.6*mm - 2*dead;
+  crystalZ     = 54.0*mm  - 2*dead;
   mgoThickness = 1.5*mm;
   mgoX         = (crystalX+2*mgoThickness + 2*dead)*mm;  //LR
   mgoY         = (crystalY+2*mgoThickness + 2*dead)*mm;  //LR
@@ -380,6 +352,102 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   can3X        = (crystal3X + 2*mgoThickness + 2*dead + 2*canThickness)*mm;
   can3Y        = (crystal3Y + 2*mgoThickness + 2*dead + 2*canThickness)*mm;
   can3Z        = (crystal3Z + 2*mgoThickness + 2*dead + 2*canThickness)*mm;
+  
+  G4Material *CsI = G4NistManager::Instance()->FindOrBuildMaterial("G4_CESIUM_IODIDE");
+  G4Material *Al = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  MgO = G4NistManager::Instance()->FindOrBuildMaterial("G4_MAGNESIUM_OXIDE");
+  std::cout<<"MGO FORMULA: "<<MgO->GetName()<<"\n";
+  G4Material* CanMaterial      = Al;
+  std::cout<<"CAN MATERIAL: "<<Al->GetName()<<"\n";
+  G4Material* CrystalMaterial = CsI;
+  
+  // Absorber
+  outerCanAb = new G4Box("outerCanAb",		        //its name
+		 canX/2,canY/2,canZ/2);      //size
+  innerCanAb = new G4Box("innerCanAb",		        //its name
+		 canX/2-canThickness,
+		 canY/2-canThickness,
+		 canZ/2);                      //size
+  solidCanAb = new G4SubtractionSolid("CanAb", outerCanAb, innerCanAb,
+			      G4Transform3D(G4RotationMatrix(),
+					    G4ThreeVector(0.,0.,canThickness))); //LR
+  logicCanAb = new G4LogicalVolume(solidCanAb,    //its solid
+			   CanMaterial, //its material
+			   "CanAb");      //name
+
+// MgO Reflector
+
+  outerMgoAb = new G4Box("outerMgoAb",		        //its name
+		 mgoX/2,mgoY/2,mgoZ/2);         //size
+  innerMgoAb = new G4Box("innerMgoAb",		        //its name
+		 mgoX/2-mgoThickness,
+		 mgoY/2-mgoThickness,
+		 mgoZ/2);                   //size
+  solidMgoAb = new G4SubtractionSolid("MgO", outerMgoAb, innerMgoAb,
+			      G4Transform3D(G4RotationMatrix(),
+					    G4ThreeVector(0.,0.,mgoThickness))); //LR
+  logicMgoAb = new G4LogicalVolume(solidMgoAb,    //its solid
+			   MgO,         //its material
+			   "MgOAb");      //name
+// Dead Layer
+  outerDeadAb = new G4Box("outerDeadAb",		        //its name
+		     crystalX/2 + dead,
+		     crystalY/2 + dead,
+		     crystalZ/2 + dead);               //size
+  innerDeadAb = new G4Box("innerDeadAb",		        //its name
+		     crystalX/2,
+		     crystalY/2,
+		     crystalZ/2);               //size
+  solidDeadAb = new G4SubtractionSolid("MgO", outerDeadAb, innerDeadAb,
+			      G4Transform3D(G4RotationMatrix(),
+					    G4ThreeVector(0.,0.,dead))); //LR
+  logicDeadAb = new G4LogicalVolume(solidDeadAb,    //its solid
+			   CrystalMaterial,         //its material
+			   "DeadAbLayer");      //name
+  // 
+  fSolidAbsorber = new G4Box("Absorber",//This is the same as crystal x        
+		     	      crystalX/2,
+		              crystalY/2,
+		              crystalZ/2);               //size
+                          
+  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
+                                       fAbsorberMaterial, //its material
+                                       "Absorber");       //its name
+  fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
+                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                                fLogicAbsorber,     //its logical volume
+                                "Absorber",         //its name
+                                fLogicWorld,        //its mother
+                                false,              //no boulean operat
+                                0);                 //copy number
+  fPhysiAbsorberCan = new G4PVPlacement(0,                   //no rotation
+                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                                logicCanAb,     //its logical volume
+                                "CanAbsorber",         //its name
+                                fLogicWorld,        //its mother
+                                false,              //no boulean operat
+                                0);                 //copy number
+  
+  fPhysiAbsorberMgo = new G4PVPlacement(0,                   //no rotation
+                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                                logicMgoAb,     //its logical volume
+                                "MgoAbsorber",         //its name
+                                fLogicWorld,        //its mother
+                                false,              //no boulean operat
+                                0);                 //copy number
+  
+  fPhysiAbsorberDead = new G4PVPlacement(0,                   //no rotation
+                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                                logicDeadAb,     //its logical volume
+                                "DeadAbsorber",         //its name
+                                fLogicWorld,        //its mother
+                                false,              //no boulean operat
+                                0);                 //copy number
+                                        
+  PrintCalorParameters();         
+  
+
+  // Dimensions
   //always return the physical World
 
   outerCan = new G4Box("outerCan",		        //its name
@@ -409,7 +477,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   logicMgo = new G4LogicalVolume(solidMgo,    //its solid
 			   MgO,         //its material
 			   "MgO3");      //name
-
+// Dead Layer
+  outerDead = new G4Box("outerDead",		        //its name
+		     crystal3X/2 + dead,
+		     crystal3Y/2 + dead,
+		     crystal3Z/2 + dead);               //size
+  innerDead = new G4Box("innerDead",		        //its name
+		     crystal3X/2,
+		     crystal3Y/2,
+		     crystal3Z/2);               //size
+  solidDead = new G4SubtractionSolid("MgO3", outerDead, innerDead,
+			      G4Transform3D(G4RotationMatrix(),
+					    G4ThreeVector(0.,0.,dead))); //LR
+  logicDead = new G4LogicalVolume(solidDead,    //its solid
+			   CrystalMaterial,         //its material
+			   "DeadLayer");      //name
 // Crystal
 
   solidCrystal = new G4Box("Crystal3",		        //its name
@@ -444,6 +526,12 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 	  physiCrystal = new G4PVPlacement(G4Transform3D(rotation,detPos),
 					   logicCrystal,	//its logical volume
 					   detName.str(),	        //its name
+					   fLogicWorld,         //its mother  volume
+					   false,		//no boolean operation
+					   detID);		//copy number
+	  physiDead = new G4PVPlacement(G4Transform3D(rotation,detPos),
+					   logicDead,	//its logical volume
+					   "DeadLayer",	        //its name
 					   fLogicWorld,         //its mother  volume
 					   false,		//no boolean operation
 					   detID);		//copy number
