@@ -75,7 +75,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   double gammaen = 1.6336;
   if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == fDetector->GetAbsorber())
 		{
-			if (primcharge || ((primen != gammaen) && (primcharge == 0)))//Primary paticle
+			if (primcharge  || ((primen != gammaen) && (primcharge == 0)))//Primary paticle
 				{	
 					fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
 				//	std::cout<<"TRACK BETA: "<<trackid<<std::endl;
