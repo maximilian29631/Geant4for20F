@@ -15,6 +15,18 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+
+find_package(MPI REQUIRED)
+set(CMAKE_CXX_COMPILER mpicxx)
+
+SET(Geant4_LIBRARIES ${Geant4_LIBRARIES} G4mpi)
+ADD_LIBRARY(G4mpi SHARED IMPORTED)
+SET_PROPERTY(TARGET G4mpi APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
+SET_TARGET_PROPERTIES(G4mpi PROPERTIES
+  IMPORTED_LOCATION_RELEASE "${Geant4_DIR}/../g4mpi/lib/libG4mpi.so"
+  IMPORTED_SONAME_RELEASE "libG4mpi.so"
+)
+
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 #
@@ -24,13 +36,16 @@ include(${Geant4_USE_FILE})
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR}
+		    /mnt/misc/sw/x86_64/Debian/8/geant4/gnu/10.04.02-mpi/lib/g4mpi/include
+		   )
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
+
 add_executable(TestEm5 TestEm5.cc ${sources} ${headers} ${TOOLS_FORTRAN_OBJECTS})
 target_link_libraries(TestEm5 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 
