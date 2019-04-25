@@ -53,9 +53,6 @@
 #include "G4VisExecutive.hh"
 #endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,7 +67,7 @@ int main(int argc,char** argv) {
   //MPI session
   G4MPIsession* session = g4MPI->GetMPIsession();
   // Construct the default run manager
-/*#ifdef G4MULTITHREADED
+#ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
   G4int nThreads = std::min(G4Threading::G4GetNumberOfCores(),4);
   if (argc==3) nThreads = G4UIcommand::ConvertToInt(argv[2]);
@@ -78,9 +75,9 @@ int main(int argc,char** argv) {
   G4cout << "===== TestEm5 is started with " 
          <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
   //return 0;
-#else*/
+#else
   G4RunManager* runManager = new G4RunManager;
-//#endif
+#endif
 
   // set mandatory initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
@@ -90,14 +87,19 @@ int main(int argc,char** argv) {
   // set user action classes
   //
   runManager->SetUserInitialization(new ActionInitialization(detector));  
-   
-  // get the pointer to the User Interface manager 
+  std::cout<<"STARTING SESSION!\n";
 #ifdef G4VIS_USE
       G4VisManager* visManager = new G4VisExecutive;
       visManager->Initialize();
+      G4cout<<"\n";
 #endif    
 
-  session->SessionStart();
+
+  session->SessionStart(); 
+
+
+  // get the pointer to the User Interface manager 
+
 /*  G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc!=1)   // batch mode  
@@ -124,9 +126,12 @@ int main(int argc,char** argv) {
       delete visManager;
 #endif     
     }
-    
+  */  
   // job termination
-  // */ 
+  //  
+#ifdef G4VIS_USE
+      delete visManager;
+#endif     
   std::cout<<"HERE!"<<std::endl;
   delete g4MPI;
   delete runManager;
