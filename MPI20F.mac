@@ -1,0 +1,47 @@
+/control/verbose 1
+/mpi/verbose 1
+/testem/phys/addPhysics emstandard_opt4
+
+/run/initialize
+
+/run/setCutForAGivenParticle e- 5 um
+/run/setCutForAGivenParticle e+ 5 um
+/run/setCutForAGivenParticle gamma 5 mm
+/analysis/setFileName Geant4Output/test_mpi_1e7
+/process/em/fluo true
+/process/em/pixe true
+/process/em/auger true
+
+/gps/source/set 0
+/gps/ene/type Arb
+/gps/hist/type arb
+/gps/particle e-
+#/gps/hist/file SimplePS_20F.txt
+/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewVal.dat
+/gps/hist/inter Lin
+
+/gps/source/set 1
+/gps/particle gamma
+/gps/energy 1.633602 MeV
+#/gps/energy 0
+/gps/ang/type iso
+#Need that for isotropic for gamma
+/analysis/h1/set 0 32768  0  8192 keV   #energy deposit total
+/analysis/h1/set 1 32768  0  8192 keV   #energy deposit absorber
+/analysis/h1/set 3 32768  0  8192 keV #photons
+/analysis/h1/set 25 32768  0  8192 keV  #energy deposit
+/analysis/h1/set 26 32768  0  8192 keV  #energy deposit
+/analysis/h1/set 27 32768  0  8192 keV  #energy deposit
+/analysis/h1/set 28 32768  0  8192 keV  #energy deposit
+/analysis/h1/set 48 32768  0  8192 keV  #brem
+/analysis/h1/set 49 32768  0  8192 keV  #energy source
+
+/run/printProgress 10000
+#/mpi/beamOn 2000000000
+#/mpi/beamOn 20000000
+#/mpi/beamOn 200000000
+#/mpi/beamOn 100000000
+/mpi/beamOn 1000000
+#/mpi/beamOn 1
+~
+

@@ -44,9 +44,10 @@
 
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4MPImanager.hh"
 #include <iomanip>
 #include "G4GeneralParticleSource.hh"
-
+#include <sstream>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -109,7 +110,15 @@ void RunAction::BeginOfRunAction(const G4Run*)
   
   //histograms
   //        
+
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  G4int rank = G4MPImanager::GetManager()->GetRank();
+  G4String filename = analysisManager->GetFileName();
+  std::stringstream newfilename;
+  newfilename<<filename<<"_t"<<rank;
+
+  analysisManager->SetFileName(newfilename.str());
+
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
   } 
