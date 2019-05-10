@@ -7,7 +7,8 @@
 /run/setCutForAGivenParticle e- 5 um
 /run/setCutForAGivenParticle e+ 5 um
 /run/setCutForAGivenParticle gamma 5 mm
-/analysis/setFileName Geant4Output/test_mpi_1e7
+#/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_realgeometry_timesW
+/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_deadseperatelayer_fullcan_geant4gammageo_timesW
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
@@ -17,13 +18,17 @@
 /gps/hist/type arb
 /gps/particle e-
 #/gps/hist/file SimplePS_20F.txt
-/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewVal.dat
+/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValTimesW.dat
+#/gps/hist/file F20Spectrum_Fayans_Withshape_1024OverRange_Recoil_NewVal.dat
 /gps/hist/inter Lin
 
 /gps/source/set 1
 /gps/particle gamma
 /gps/energy 1.633602 MeV
 #/gps/energy 0
+/gps/ang/type iso
+
+/gps/source/set 2
 /gps/ang/type iso
 #Need that for isotropic for gamma
 /analysis/h1/set 0 32768  0  8192 keV   #energy deposit total
@@ -37,11 +42,8 @@
 /analysis/h1/set 49 32768  0  8192 keV  #energy source
 
 /run/printProgress 10000
-#/mpi/beamOn 2000000000
+/mpi/beamOn 2000000000
 #/mpi/beamOn 20000000
-#/mpi/beamOn 200000000
-#/mpi/beamOn 100000000
-/mpi/beamOn 1000000
-#/mpi/beamOn 1
+#/mpi/beamOn 14000000000
 ~
 

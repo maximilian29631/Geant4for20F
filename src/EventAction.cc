@@ -1,4 +1,5 @@
 //
+
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -116,13 +117,21 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
     analysisManager->FillNtupleDColumn(1,fEnergyDepositAbsorberGamma/MeV);
     analysisManager->FillNtupleDColumn(6,(ke+ke3)/MeV);  
+    bool isnonzero = false;//Is there anything deposited in the gamma detectors
+    bool onlyone = true;
     for (int w = 0;w<numgamma;w++)
 	{
 	int histonum = 25 + w;
-	analysisManager->FillH1(histonum,fEnergyDepositGamma[w]/MeV);
+	if (fEnergyDepositGamma[w]) 
+		{
+		if (isnonzero) onlyone = false; //Want only one.
+		isnonzero = true;
+		analysisManager->FillH1(histonum,fEnergyDepositGamma[w]/MeV);
+		}
 	analysisManager->FillNtupleDColumn(w + 2,fEnergyDepositGamma[w]/MeV);
 	}
-    analysisManager->AddNtupleRow();
+   if (isnonzero && onlyone)  analysisManager->AddNtupleRow();
+   //analysisManager->AddNtupleRow();
     //outdep<<fEnergyDeposit<<G4endl;
     //outsource<<ke<<G4endl;
 }
