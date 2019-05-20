@@ -114,11 +114,12 @@ void EventAction::EndOfEventAction(const G4Event* evt)
     analysisManager->FillH1(35, ke3/MeV); 
     analysisManager->FillH1(49, (ke+ke3)/MeV);   
 
-    analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
-    analysisManager->FillNtupleDColumn(1,fEnergyDepositAbsorberGamma/MeV);
-    analysisManager->FillNtupleDColumn(6,(ke+ke3)/MeV);  
+//    analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
+//    analysisManager->FillNtupleDColumn(1,fEnergyDepositAbsorberGamma/MeV);
+//    analysisManager->FillNtupleDColumn(6,(ke+ke3)/MeV);  
     bool isnonzero = false;//Is there anything deposited in the gamma detectors
     bool onlyone = true;
+    
     for (int w = 0;w<numgamma;w++)
 	{
 	int histonum = 25 + w;
@@ -128,9 +129,25 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 		isnonzero = true;
 		analysisManager->FillH1(histonum,fEnergyDepositGamma[w]/MeV);
 		}
-	analysisManager->FillNtupleDColumn(w + 2,fEnergyDepositGamma[w]/MeV);
+	//analysisManager->FillNtupleDColumn(w + 2,fEnergyDepositGamma[w]/MeV);
+	}//Loop through once, and see if only one did fire.
+
+   for (int w = 0;w<numgamma;w++)
+	{
+	int hist2dnum = 2*w;//I have two hists to fill now
+	if (fEnergyDepositGamma[w] && onlyone)
+		{
+		if (fEnergyDepositAbsorberGamma)
+			{
+			analysisManager->FillH2(hist2dnum+1,fEnergyDepositGamma[w]/MeV,(fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);
+			}
+		else
+			{
+			analysisManager->FillH2(hist2dnum,fEnergyDepositGamma[w]/MeV,(fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);
+			}
+		} 
 	}
-   if (isnonzero && onlyone)  analysisManager->AddNtupleRow();
+   //if (isnonzero && onlyone)  analysisManager->AddNtupleRow();
    //analysisManager->AddNtupleRow();
     //outdep<<fEnergyDeposit<<G4endl;
     //outsource<<ke<<G4endl;

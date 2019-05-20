@@ -79,8 +79,8 @@ void HistoManager::Book()
                          "10","11","12","13","14","15","16","17","18","19",
                          "20","21","22","23","24","25","26","27","28","29",
                          "30","31","32","33","34","35","36","37","38","39",
-                         "40","41","42","43","44","45","46","47","48","49" 
-                        };
+                         "40","41","42","43","44","45","46","47","48","49"
+			};
                         
   const G4String title[] =
                 { "energy deposit all",	                                  //0
@@ -128,9 +128,9 @@ void HistoManager::Book()
                   "energy of PIXE gamma at creation",                     //45
                   "energy of PIXE Auger e- at creation (log scale)",      //46
                   "energy of PIXE gamma at creation (log scale)",         //47
-                  "ebem",                                                //48
-                  "source energy spectrum"//49                                        
-                 };
+                  "ebem",                                                 //48
+                  "source energy spectrum"				  //49                       	
+		 };
 
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
@@ -143,4 +143,26 @@ void HistoManager::Book()
     G4int ih = analysisManager->CreateH1("h"+id[k], title[k], nbins,vmin,vmax);
     analysisManager->SetH1Activation(ih, false);
   }
+
+  const int num2d = 8;
+
+  const G4String title2d[] =
+		{
+		"gammaup2Dnogamma",
+		"gammaup2Dwithgamma",
+		"gammaleft2Dnogamma",
+		"gammaleft2Dwithgamma",
+		"gammadown2Dnogamma",
+		"gammadown2Dwithgamma",
+		"gammaright2Dnogamma",		
+		"gammaright2Dwithgamma"		
+		};
+
+
+  for (G4int k = 0;k<num2d;k++)
+	{
+	G4int ih = analysisManager->CreateH2("h2D"+id[k], title2d[k], nbins,vmin,vmax,nbins,vmin,vmax);
+	std::cout<<"NEW 2D HISTS: "<<ih<<"\n";
+	analysisManager->SetH2Activation(ih, false);
+	}
 }
