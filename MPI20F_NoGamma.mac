@@ -7,8 +7,7 @@
 /run/setCutForAGivenParticle e- 5 um
 /run/setCutForAGivenParticle e+ 5 um
 /run/setCutForAGivenParticle gamma 5 mm
-#/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_timesWW
-/analysis/setFileName Geant4Output/test2d
+/analysis/setFileName Geant4Output/csi_ps_20f_1e8_recoil_withinnerbrems_usingMPI_nogamma_recordinginnerbrems
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
@@ -18,14 +17,14 @@
 /gps/hist/type arb
 /gps/particle e-
 #/gps/hist/file SimplePS_20F.txt
-/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValTimesWW.dat
-#/gps/hist/file F20Spectrum_Fayans_WWithshape_1024OverRange_Recoil_NewVal.dat
+/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewVal.dat
+#/gps/hist/file F20Spectrum_Fayans_Withshape_1024OverRange_Recoil_NewVal.dat
 /gps/hist/inter Lin
 
 /gps/source/set 1
 /gps/particle gamma
-/gps/energy 1.633602 MeV
-#/gps/energy 0
+#/gps/energy 1.633602 MeV
+/gps/energy 0
 /gps/ang/type iso
 
 /gps/source/set 2
@@ -43,8 +42,7 @@
 
 /run/printProgress 10000
 #/mpi/beamOn 2000000000
-/mpi/beamOn 10000
-#/mpi/beamOn 20000000
+/mpi/beamOn 100000000
 #/mpi/beamOn 14000000000
 ~
 

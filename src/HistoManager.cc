@@ -161,7 +161,7 @@ void HistoManager::Book()
 
   for (G4int k = 0;k<num2d;k++)
 	{
-	G4int ih = analysisManager->CreateH2("h2D"+id[k], title2d[k], nbins,vmin,vmax,nbins,vmin,vmax);
+	G4int ih = analysisManager->CreateH2("h5"+id[k], title2d[k], nbins,vmin,vmax,nbins,vmin,vmax);
 	std::cout<<"NEW 2D HISTS: "<<ih<<"\n";
 	analysisManager->SetH2Activation(ih, false);
 	}

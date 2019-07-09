@@ -6,9 +6,9 @@
 
 /run/setCutForAGivenParticle e- 5 um
 /run/setCutForAGivenParticle e+ 5 um
-/run/setCutForAGivenParticle gamma 5 mm
-#/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_timesWW
-/analysis/setFileName Geant4Output/test2d
+/run/setCutForAGivenParticle gamma 5 um
+/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_2dhists_5ugamma_timesWW
+#/analysis/setFileName Geant4Output/Test
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
@@ -18,6 +18,7 @@
 /gps/hist/type arb
 /gps/particle e-
 #/gps/hist/file SimplePS_20F.txt
+#/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValDivW.dat
 /gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValTimesWW.dat
 #/gps/hist/file F20Spectrum_Fayans_WWithshape_1024OverRange_Recoil_NewVal.dat
 /gps/hist/inter Lin
@@ -30,8 +31,8 @@
 
 /gps/source/set 2
 /gps/ang/type iso
+
 #Need that for isotropic for gamma
-/analysis/h1/set 0 32768  0  8192 keV   #energy deposit total
 /analysis/h1/set 1 32768  0  8192 keV   #energy deposit absorber
 /analysis/h1/set 3 32768  0  8192 keV #photons
 /analysis/h1/set 25 32768  0  8192 keV  #energy deposit
@@ -41,9 +42,33 @@
 /analysis/h1/set 48 32768  0  8192 keV  #brem
 /analysis/h1/set 49 32768  0  8192 keV  #energy source
 
+/analysis/h2/setX 0 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 0 512  0  8192 keV
+
+/analysis/h2/setX 1 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 1 512  0  8192 keV
+
+/analysis/h2/setX 2 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 2 512  0  8192 keV
+
+/analysis/h2/setX 3 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 3 512  0  8192 keV
+
+/analysis/h2/setX 4 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 4 512  0  8192 keV
+
+/analysis/h2/setX 5 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 5 512  0  8192 keV
+
+/analysis/h2/setX 6 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 6 512  0  8192 keV
+
+/analysis/h2/setX 7 4096  0  4096 keV  #2d up no gamma
+/analysis/h2/setY 7 512  0  8192 keV
+
 /run/printProgress 10000
-#/mpi/beamOn 2000000000
-/mpi/beamOn 10000
+/mpi/beamOn 2000000000
+#/mpi/beamOn 100000
 #/mpi/beamOn 20000000
 #/mpi/beamOn 14000000000
 ~
