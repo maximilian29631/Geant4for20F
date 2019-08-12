@@ -278,8 +278,8 @@ void DetectorConstruction::ComputeCalorParameters()
   if (fDefaultWorld || 2*xmax >=  fWorldSizeX ||
       fAbsorberSizeYZ >= fWorldSizeYZ) 
     {
-      fWorldSizeX = 15*xmax; 
-      fWorldSizeYZ= 9*fAbsorberSizeYZ;
+      fWorldSizeX = 20*xmax; 
+      fWorldSizeYZ= 20*fAbsorberSizeYZ;
     }         
 }
 
@@ -332,7 +332,9 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   G4double space3Z;                 //LR
   G4double spaceThicknessSide3;          //LR
   G4double spaceThicknessFront3;          //LR
-  
+
+  double deadlayer = 0.0*mm; 
+ 
   crystalX     = 101.6*mm; 
   crystalY     = 54.0*mm;
   crystalZ     = 54.0*mm;
@@ -397,22 +399,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 // Dead Layer
   // 
   fSolidAbsorber = new G4Box("Absorber",//This is the same as crystal x        
-		     	      crystalX/2,
-		              crystalY/2,
-		              crystalZ/2);               //size
+		     	      (crystalX - deadlayer)/2,
+		              (crystalY - deadlayer)/2,
+		              (crystalZ - deadlayer)/2);               //size
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
                                        fAbsorberMaterial, //its material
                                        "Absorber");       //its name
   fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
-                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                        G4ThreeVector(fXposAbs,0.4*mm,0.),    //its position
                                 fLogicAbsorber,     //its logical volume
                                 "Absorber",         //its name
                                 fLogicWorld,        //its mother
                                 false,              //no boulean operat
                                 0);                 //copy number
   fPhysiAbsorberCan = new G4PVPlacement(0,                   //no rotation
-                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                        G4ThreeVector(fXposAbs,0.4*mm,0.),    //its position
                                 logicCanAb,     //its logical volume
                                 "CanAbsorber",         //its name
                                 fLogicWorld,        //its mother
@@ -420,7 +422,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                 0);                 //copy number
   
   fPhysiAbsorberSpace = new G4PVPlacement(0,                   //no rotation
-                        G4ThreeVector(fXposAbs,0.,0.),    //its position
+                        G4ThreeVector(fXposAbs,0.4*mm,0.),    //its position
                                 logicSpaceAb,     //its logical volume
                                 "MgoAbsorber",         //its name
                                 fLogicWorld,        //its mother
@@ -466,14 +468,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 // Crystal
 
   solidCrystal = new G4Box("Crystal3",		        //its name
-		     crystal3X/2,
-		     crystal3Y/2,
-		     crystal3Z/2);               //size
+		     (crystal3X - deadlayer)/2,
+		     (crystal3Y - deadlayer)/2,
+		     (crystal3Z - deadlayer)/2);               //size
   logicCrystal = new G4LogicalVolume(solidCrystal,	//its solid
 			       CrystalMaterial,	//its material
 			       "Crystal3");	//its name
 
   int detID = 0;
+
+  double away = 0.0*mm; //How much further are gamma detectors away
+
   for (detID = 0;detID<numdet;detID++)
 	  {
 	  std::stringstream detName;
@@ -486,7 +491,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
 	 
 	  double x =  (canX - can3X)/2.0 + 2.54*cm;
-	  double averagecan = (can3Z + can3Y)/2.0;
+	  double averagecan = (can3Z + can3Y)/2.0 + away;
           double y = averagecan * cos(angle);
 	  double z = averagecan * sin(angle);
 

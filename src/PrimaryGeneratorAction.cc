@@ -1,4 +1,4 @@
-//
+
 // ********************************************************************
 // * License and Disclaimer                                           *
 // *                                                                  *
@@ -197,7 +197,8 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
      ///degrader at 0
     G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
     posDist->SetPosDisType("Volume");  // or Point,Plane,Volume,Beam
-    posDist->SetCentreCoords(G4ThreeVector(sourcelocal*cm,0.0*cm,0.0*cm)); //Source position. F20
+    //posDist->SetCentreCoords(G4ThreeVector(sourcelocal*cm,0.0*cm,0.0*cm)); //Source position. F20
+    posDist->SetCentreCoords(G4ThreeVector(sourcelocal*cm,0.4*cm,0.0*cm)); //Source position. F20
    // posDist->SetCentreCoords(G4ThreeVector(2.44*cm,1.2674*cm,0.0*cm)); //Source position. He6
     posDist->SetPosDisShape("Para");
     posDist->SetHalfX(sourcesizex/2.0*mm);//y

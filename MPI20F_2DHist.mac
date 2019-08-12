@@ -1,25 +1,30 @@
 /control/verbose 1
 /mpi/verbose 1
 /testem/phys/addPhysics emstandard_opt4
+#/testem/phys/addPhysics empenelope 
 
 /run/initialize
 
 /run/setCutForAGivenParticle e- 5 um
 /run/setCutForAGivenParticle e+ 5 um
 /run/setCutForAGivenParticle gamma 5 um
-/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_2dhists_5umgamma_timesW
-#/analysis/setFileName Geant4Output/Test
+#/analysis/setFileName Geant4Output/csi_ps_20f_2e9_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_2dhists_1mmgamma_shiftedimplant_1mmdeadlayer
+#/analysis/setFileName Geant4Output/csi_ps_20f_2e8_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_2dhists_1mmgamma_shiftedimplant_gamma50mmaway
+#/analysis/setFileName Geant4Output/csi_ps_20f_2e8_recoil_withinnerbrems_usingMPI_isoinnerbrems_noshape_matchingdrawinggeo_2dhists_1mmgamma_shiftedimplant_penelopephysics
+#/analysis/setFileName Geant4Output/csi_ps_20f_14e7_recoil_withinnerbrems_usingMPI_isoinnerbrems_withshape_matchingdrawinggeo_2dhists_1mmgamma_penelopephysics
+/analysis/setFileName Geant4Output/Test_1e6_ForInnerBrems_NoOuterBrems
 /process/em/fluo true
 /process/em/pixe true
 /process/em/auger true
+
 
 /gps/source/set 0
 /gps/ene/type Arb
 /gps/hist/type arb
 /gps/particle e-
 #/gps/hist/file SimplePS_20F.txt
-#/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewVal.dat
-/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValTimesW.dat
+/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewVal.dat
+#/gps/hist/file F20Spectrum_Fayans_Noshape_1024OverRange_Recoil_NewValTimesW.dat
 #/gps/hist/file F20Spectrum_Fayans_Withshape_1024OverRange_Recoil_NewVal.dat
 /gps/hist/inter Lin
 
@@ -34,12 +39,13 @@
 
 #Need that for isotropic for gamma
 /analysis/h1/set 1 32768  0  8192 keV   #energy deposit absorber
-/analysis/h1/set 3 32768  0  8192 keV #photons
-/analysis/h1/set 25 32768  0  8192 keV  #energy deposit
-/analysis/h1/set 26 32768  0  8192 keV  #energy deposit
-/analysis/h1/set 27 32768  0  8192 keV  #energy deposit
-/analysis/h1/set 28 32768  0  8192 keV  #energy deposit
+#/analysis/h1/set 3 32768  0  8192 keV #photons
+#/analysis/h1/set 25 32768  0  8192 keV  #energy deposit
+#/analysis/h1/set 26 32768  0  8192 keV  #energy deposit
+#/analysis/h1/set 27 32768  0  8192 keV  #energy deposit
+#/analysis/h1/set 28 32768  0  8192 keV  #energy deposit
 /analysis/h1/set 48 32768  0  8192 keV  #brem
+/analysis/h1/set 35 32768  0  8192 keV  #energy source
 /analysis/h1/set 49 32768  0  8192 keV  #energy source
 
 /analysis/h2/setX 0 4096  0  4096 keV  #2d up no gamma
@@ -68,10 +74,10 @@
 
 
 /run/printProgress 10000
-/mpi/beamOn 2000000000
-#/mpi/beamOn 20000000
+#/mpi/beamOn 2000000000
+#/mpi/beamOn 200000000
 #/mpi/beamOn 140000000
-#/mpi/beamOn 100000
+/mpi/beamOn 1000000
 #/mpi/beamOn 14000000000
 ~
 

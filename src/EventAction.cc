@@ -111,7 +111,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
 
     analysisManager->FillH1(0, fEnergyDeposit/MeV);   
     analysisManager->FillH1(1, (fEnergyDepositAbsorberGamma + fEnergyDepositAbsorberBeta)/MeV);   
-    analysisManager->FillH1(35, ke3/MeV); 
+    if(ke3) analysisManager->FillH1(35, ke3/MeV); 
     analysisManager->FillH1(49, (ke+ke3)/MeV);   
 
 //    analysisManager->FillNtupleDColumn(0,fEnergyDepositAbsorberBeta/MeV);
