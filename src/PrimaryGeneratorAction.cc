@@ -178,7 +178,7 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
   //  double sourcesizez = 0.4; 
 
 
-    // For flourine 20    
+    /*// For flourine 20    
     double sourcesizex = 0.4; // mm horizontal
     double sourcesizey = 3.5; // mm verticle  
     double sourcesizez = 3.6; // mm depth  
@@ -189,10 +189,10 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     double halfsize = 9.76/2.0 + 0.2; //Size of detector in cm, including dead layer
     double sourcelocal = halfsize - sourcedepth;//In cm.
     //For helium 6
-    /*double sourcesizex = 2.3; // mm horizontal
+    double sourcesizex = 2.3; // mm horizontal
     double sourcesizey = 0.73; // mm verticle  
     double sourcesizez = 2.25; // mm depth  
-*/
+
    
      ///degrader at 0
     G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
@@ -205,6 +205,24 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     posDist->SetHalfY(sourcesizey/2.0*mm);//z
     posDist->SetHalfZ(sourcesizez/2.0*mm);//x
 
+    posDist->SetHalfX(1.15*mm);//y
+     posDist->SetHalfY(0.73*mm);//z
+     posDist->SetHalfZ(1.125*mm);
+    
+    // set angular distribution
+    G4SPSAngDistribution *angDist = gps->GetCurrentSource()->GetAngDist();
+    angDist->SetAngDistType("iso");
+    //angDist->SetParticleMomentumDirection( G4ThreeVector(0., 0., 1.) );
+   */ 
+    // set energy distribution
+     G4SPSPosDistribution *posDist = gps->GetCurrentSource()->GetPosDist();
+     posDist->SetPosDisType("Volume");  // or Point,Plane,Volume,Beam
+     posDist->SetCentreCoords(G4ThreeVector(2.44*cm,1.2674*cm,0.0*cm));
+     posDist->SetPosDisShape("Para");
+     posDist->SetHalfX(2.3*mm);//y
+     posDist->SetHalfY(0.73*mm);//z
+     posDist->SetHalfZ(2.25*mm);//x
+
     /*posDist->SetHalfX(1.15*mm);//y
      posDist->SetHalfY(0.73*mm);//z
      posDist->SetHalfZ(1.125*mm);*/
@@ -213,8 +231,6 @@ G4GeneralParticleSource* PrimaryGeneratorAction::InitializeGPS(int parttype)
     G4SPSAngDistribution *angDist = gps->GetCurrentSource()->GetAngDist();
     angDist->SetAngDistType("iso");
     //angDist->SetParticleMomentumDirection( G4ThreeVector(0., 0., 1.) );
-    
-    // set energy distribution
     
     return gps;
 }

@@ -38,69 +38,55 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 #include "TrackInformation.hh"
-#include "StoragePlace.hh"
-
 #include "G4PrimaryParticle.hh"
 #include "G4Step.hh"
 
 #include <sstream>
 #include <algorithm>
 #include <vector>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::SteppingAction(DetectorConstruction* DET,
                                EventAction* EA)
 :G4UserSteppingAction(),fDetector(DET), fEventAction(EA)
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  // if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
-  //  != fDetector->GetAbsorber()) return;
-  //Only absorber    
+  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
+    != fDetector->GetAbsorber()) return;
+    
   fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
+   
   G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+
   TrackInformation *info  = (TrackInformation*)aStep->GetTrack()->GetUserInformation();
   G4double primcharge = info->GetOriginalParticle()->GetPDGCharge();
-  G4double primen = info->GetOriginalEnergy();
-  double gammaen = 1.6336;
-  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() == fDetector->GetAbsorber())
-		{
-			if ((primcharge)  || ((primen != gammaen) && (primcharge == 0)))//Primary paticle
-				{	
-					fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
-				//	std::cout<<"TRACK BETA: "<<trackid<<std::endl;
-				}
-			else
-				{
-					fEventAction->AddEnergyAbsorberGamma (aStep->GetTotalEnergyDeposit());
-				//	std::cout<<"TRACK GAMMA: "<<trackid<<std::endl;
-				}	
-		}
-  else 
-	{
-	if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName() != "World")
-		{
-			for (int w = 0;w<4;w++)
-				{
-				std::stringstream name;
-				name<<"Gammadet"<<w;
-				if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetName() == name.str().c_str())
-					{
-					fEventAction->AddEnergyGamma(aStep->GetTotalEnergyDeposit(),w);//Adding the enrgy for the histograms.
-					}
-				}
-		}
-	}
+  //G4double primen = info->GetOriginalEnergy();
+
+  if (primcharge)//Primary paticle
+        { 
+          fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
+        //  std::cout<<"TRACK BETA: "<<trackid<<std::endl;
+
+        }
+      else
+        {
+          fEventAction->AddEnergyAbsorberGamma (aStep->GetTotalEnergyDeposit());
+        //  std::cout<<"TRACK GAMMA: "<<trackid<<std::endl;
+        }
+ 
+  //fEventAction->AddEnergyAbsorberBeta (aStep->GetTotalEnergyDeposit());
+        //  std::cout<<"TRACK BETA: "<<trackid<<std::endl;
+
   if (charge != 0.) { 
     fEventAction->AddTrakLenCharg(aStep->GetStepLength());
     fEventAction->CountStepsCharg();
@@ -116,9 +102,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
       G4cout << i << ": " << G4PhysicsModelCatalog::GetModelName(i) << G4endl;
     }
   }*/
- 
+  
   }
-  //delete info;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
